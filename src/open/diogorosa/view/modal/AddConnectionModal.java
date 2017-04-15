@@ -111,16 +111,13 @@ public class AddConnectionModal extends JDialog {
                     java.awt.Color.red), contentPanel.getBorder())); contentPanel.addPropertyChangeListener(new java.beans.PropertyChangeListener(){public void propertyChange(java.beans.PropertyChangeEvent e){if("border".equals(e.getPropertyName()))throw new RuntimeException();}});
 
             contentPanel.setLayout(new MigLayout(
-                "fill,insets dialog,hidemode 3",
+                "fill,insets 0,hidemode 3",
                 // columns
                 "[fill]",
                 // rows
                 "[fill]" +
                 "[fill]" +
                 "[fill]"));
-
-            //---- comboBoxDB ----
-            comboBoxDB.setPrototypeDisplayValue("DBnnectionConstants.DB_TEH_OPTIONS");
             contentPanel.add(comboBoxDB, "cell 0 0");
 
             //======== panel1 ========
@@ -195,7 +192,7 @@ public class AddConnectionModal extends JDialog {
         //======== buttonBar ========
         {
             buttonBar.setLayout(new MigLayout(
-                "fill,insets 0,hidemode 3,alignx left",
+                "fill,insets dialog,hidemode 3,alignx left",
                 // columns
                 "[fill]" +
                 "[fill]" +
