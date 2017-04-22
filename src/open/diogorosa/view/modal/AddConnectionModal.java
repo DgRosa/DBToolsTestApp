@@ -5,7 +5,6 @@
 package open.diogorosa.view.modal;
 
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.*;
 
@@ -27,21 +26,9 @@ public class AddConnectionModal extends JDialog {
     }
 
     public String[] getFormData(){
-        return new String[]{comboBoxDB.getSelectedItem().toString(),
+        return new String[]{textFieldConnName.getText(), comboBoxDB.getSelectedItem().toString(),
         textFieldUserName.getText(), String.valueOf(passwordField.getPassword()),
         textFieldHostName.getText(), textFieldPort.getText(), textFieldDB.getText()};
-    }
-
-    public void addButtonOkListener(AbstractAction listener){
-        btOk.addActionListener(listener);
-    }
-
-    public void addButtonCancelListener(AbstractAction listener){
-        btCancel.addActionListener(listener);
-    }
-
-    public void addButtonTestListener(AbstractAction listener){
-        btTest.addActionListener(listener);
     }
 
     public JComboBox getComboBoxDB() {
@@ -68,11 +55,34 @@ public class AddConnectionModal extends JDialog {
         return textFieldUserName;
     }
 
+    public JTextField getTextFieldConnName() {
+        return textFieldConnName;
+    }
+
+    public void addButtonOkListener(AbstractAction listener){
+        btOk.addActionListener(listener);
+    }
+
+    public void addButtonCancelListener(AbstractAction listener){
+        btCancel.addActionListener(listener);
+    }
+
+    public void addButtonTestListener(AbstractAction listener){
+        btTest.addActionListener(listener);
+    }
+
+    public void addFieldHostNamePropertieChangeListener(PropertyChangeListener listener){
+        //textFieldHostName.getDocument().
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Diogo Rosa
         contentPanel = new JPanel();
         comboBoxDB = new JComboBox(DBConnectionConstants.DB_TECH_OPTIONS);
+        panel3 = new JPanel();
+        label1 = new JLabel();
+        textFieldConnName = new JTextField();
         panel1 = new JPanel();
         lbHostName = new JLabel();
         lbPort = new JLabel();
@@ -93,7 +103,7 @@ public class AddConnectionModal extends JDialog {
         //======== this ========
         Container contentPane = getContentPane();
         contentPane.setLayout(new MigLayout(
-            "insets 0,hidemode 3,gap 0 0",
+            "insets 1,hidemode 3,gap 0 0",
             // columns
             "[grow,fill]",
             // rows
@@ -116,9 +126,30 @@ public class AddConnectionModal extends JDialog {
                 "[fill]",
                 // rows
                 "[fill]" +
+                "[]" +
                 "[fill]" +
                 "[fill]"));
             contentPanel.add(comboBoxDB, "cell 0 0");
+
+            //======== panel3 ========
+            {
+                panel3.setLayout(new MigLayout(
+                    "fill,hidemode 3",
+                    // columns
+                    "[fill]",
+                    // rows
+                    "[]" +
+                    "[]"));
+
+                //---- label1 ----
+                label1.setText("Connection Name");
+                panel3.add(label1, "cell 0 0");
+
+                //---- textFieldConnName ----
+                textFieldConnName.setText("Testing");
+                panel3.add(textFieldConnName, "cell 0 1,growx");
+            }
+            contentPanel.add(panel3, "cell 0 1");
 
             //======== panel1 ========
             {
@@ -156,7 +187,7 @@ public class AddConnectionModal extends JDialog {
                 textFieldDB.setText("XE");
                 panel1.add(textFieldDB, "cell 2 1");
             }
-            contentPanel.add(panel1, "cell 0 1");
+            contentPanel.add(panel1, "cell 0 2");
 
             //======== panel2 ========
             {
@@ -185,7 +216,7 @@ public class AddConnectionModal extends JDialog {
                 passwordField.setText("COBL_OWN");
                 panel2.add(passwordField, "cell 1 1");
             }
-            contentPanel.add(panel2, "cell 0 2");
+            contentPanel.add(panel2, "cell 0 3");
         }
         contentPane.add(contentPanel, "cell 0 0");
 
@@ -223,6 +254,9 @@ public class AddConnectionModal extends JDialog {
     // Generated using JFormDesigner Evaluation license - Diogo Rosa
     private JPanel contentPanel;
     private JComboBox comboBoxDB;
+    private JPanel panel3;
+    private JLabel label1;
+    private JTextField textFieldConnName;
     private JPanel panel1;
     private JLabel lbHostName;
     private JLabel lbPort;

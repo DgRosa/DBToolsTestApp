@@ -21,6 +21,7 @@ new FormModel {
 					name: "treeConnections"
 					auxiliary() {
 						"JavaCodeGenerator.postCreateCode": "\nTreeSelectionModel selectionModel = new DefaultTreeSelectionModel();\nselectionModel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);\ntreeConnections.setSelectionModel(selectionModel);\ntreeConnections.setRootVisible(false);\ntreeConnections.setModel(null);\n\n"
+						"JavaCodeGenerator.customCreateCode": "new CustomJTree(popupMenu);"
 					}
 				} )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {

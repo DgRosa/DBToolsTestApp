@@ -7,17 +7,20 @@ package open.diogorosa.view;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultTreeSelectionModel;
-import javax.swing.tree.TreeSelectionModel;
+import javax.swing.tree.*;
 
 import net.miginfocom.swing.*;
 import open.diogorosa.controller.MainController;
+import open.diogorosa.customjcomponent.CustomJTree;
 
 /**
  * @author Diogo Rosa
  */
 public class MainView extends JFrame {
     private MainController controller;
+    private JPopupMenu popupMenu;
+    private JMenuItem itEdit;
+    private JMenuItem itDel;
 
     public MainView() {
         initComponents();
@@ -87,6 +90,18 @@ public class MainView extends JFrame {
         treeConnections.addTreeSelectionListener(listener);
     }
 
+    public void showPopUpMessage(Component parent, String message, String title, int type){
+        JOptionPane.showMessageDialog(parent, message, title, type);
+    }
+
+    public void addJTreePopUpEditListener(AbstractAction listener){
+        itEdit.addActionListener(listener);
+    }
+
+    public void addJTreePopUpDelListener(AbstractAction listener){
+        itDel.addActionListener(listener);
+    }
+
     private void createUIComponents() {
         // TODO: add custom component creation code here
     }
@@ -95,13 +110,21 @@ public class MainView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
+        popupMenu = new JPopupMenu();
+        itEdit = new JMenuItem("Edit");
+        itDel = new JMenuItem("Delete");
+
+        popupMenu.add(itEdit);
+        popupMenu.add(itDel);
+
+
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Diogo Rosa
         menuBar1 = new JMenuBar();
         menu1 = new JMenu();
         btAddConn = new JButton();
         scrollPane1 = new JScrollPane();
-        treeConnections = new JTree();
+        treeConnections = new CustomJTree(popupMenu);
 
         TreeSelectionModel selectionModel = new DefaultTreeSelectionModel();
         selectionModel.setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);

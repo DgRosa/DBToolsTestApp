@@ -1,6 +1,9 @@
 package open.diogorosa.model;
 
+import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.MutableTreeNode;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -12,27 +15,25 @@ import java.util.List;
 /**
  * Created by Diogo Rosa on 09/04/2017.
  */
-public class ConnectionListModel extends DefaultMutableTreeNode {
+public class ConnectionListModel extends DefaultTreeModel {
 
-    List<Connection> list;
+    private List<ConnectionModel> list;
+    private static final DefaultMutableTreeNode NODE = new DefaultMutableTreeNode("root");
 
     public ConnectionListModel(){
-        super("root");
+        this(null);
+    }
+
+    public ConnectionListModel(ConnectionModel connection){
+        super(NODE);
         list = new ArrayList<>();
     }
 
-    public ConnectionListModel(Connection connection){
-        super("root");
-        list = new ArrayList<>();
-    }
-
-    public boolean addConnection(Connection connection) throws SQLException {
+    public boolean addConnection(ConnectionModel connection) throws Exception {
         if(!connectinonExists(connection)) {
-            list.add(connection);
+            DefaultMutableTreeNode node = new DefaultMutableTreeNode(connection.getConnectionName());
 
-            DefaultMutableTreeNode node = new DefaultMutableTreeNode(connection.getSchema());
-
-            String[] TABLE_TYPES = {"TABLE"};
+            /*String[] TABLE_TYPES = {"TABLE"};
             DatabaseMetaData md = connection.getMetaData();
             ResultSet rs = md.getTables(null, null, "%", TABLE_TYPES);
             while (rs.next()) {
@@ -40,36 +41,51 @@ public class ConnectionListModel extends DefaultMutableTreeNode {
                     node.add(new DefaultMutableTreeNode(rs.getString(3)));
             }
 
-            this.add(node);
+            DatabaseMetaData dbmd = connection.getConnection().getMetaData();
+            ResultSet ctlgs = dbmd.getCatalogs();
+
+            if(!ctlgs.isLast()) {
+                while (ctlgs.next()) {
+                    node.add(new DefaultMutableTreeNode(ctlgs.getString(1)));
+                }
+            }*/
+
+
+            this.insertNodeInto(node, (MutableTreeNode) getRoot(), list.size());
+            list.add(connection);
 
             return true;
+        }else{
+            throw new Exception("Connection already exists!");
+        }
+    }
+
+    public boolean connectinonExists(ConnectionModel conn) throws SQLException {
+        if(conn != null) {
+            String url = conn.getConnection().getMetaData().getURL();
+
+            Iterator<ConnectionModel> iterator = list.iterator();
+            while (iterator.hasNext()) {
+                ConnectionModel temp = iterator.next();
+                String tempUrl = temp.getConnection().getMetaData().getURL();
+                String tempName = temp.getConnectionName();
+
+                if (tempUrl.compareTo(url) == 0 && tempName.compareToIgnoreCase(conn.getConnectionName()) == 0)
+                    return true;
+            }
         }
 
         return false;
     }
 
-    public boolean connectinonExists(Connection conn) throws SQLException {
-        String db = conn.getMetaData().getDatabaseProductName();
-        String url = conn.getMetaData().getURL();
-        String user = conn.getMetaData().getUserName();
-
-        Iterator<Connection> iterator = list.iterator();
-        while(iterator.hasNext()){
-            Connection temp = iterator.next();
-            String tempDb = temp.getMetaData().getDatabaseProductName();
-            String tempUrl = temp.getMetaData().getURL();
-            String tempUser = temp.getMetaData().getUserName();
-
-            if(tempDb.compareTo(db) == 0 && tempUrl.compareTo(url) == 0 && tempUser.compareTo(user) == 0)
-                return true;
-        }
-
-        return false;
+    public ConnectionModel getConnection(int i){
+        return list.get(i);
     }
 
-    private boolean filterSystemTables(String tableName){
-        return !tableName.startsWith("SDO_") && !tableName.startsWith("HELP")
-                && !tableName.startsWith("DUAL") && !tableName.startsWith("HS_PARTITION")
-                && !tableName.contains("$");
+    public void removeConnection(int i) {
+        list.remove(i);
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) getChild(getRoot(), i);
+        removeNodeFromParent(node);
+        reload();
     }
 }
