@@ -26,5 +26,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="commons-dbutils-1.6-javadoc" level="project" />
   </component>
 </module>

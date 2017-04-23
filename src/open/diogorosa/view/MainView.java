@@ -90,8 +90,9 @@ public class MainView extends JFrame {
         treeConnections.addTreeSelectionListener(listener);
     }
 
-    public void showPopUpMessage(Component parent, String message, String title, int type){
-        JOptionPane.showMessageDialog(parent, message, title, type);
+    public void showPopUpMessage(Component parent, String message, String title, int type, boolean isCancel){
+        if(!isCancel)
+            JOptionPane.showMessageDialog(parent, message, title, type);
     }
 
     public void addJTreePopUpEditListener(AbstractAction listener){
